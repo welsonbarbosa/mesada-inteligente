@@ -41,6 +41,56 @@ export type Database = {
         }
         Relationships: []
       }
+      family_invitations: {
+        Row: {
+          accepted_at: string | null
+          accepted_by: string | null
+          created_at: string
+          created_by: string
+          expires_at: string
+          family_id: string
+          id: string
+          revoked_at: string | null
+          revoked_by: string | null
+          role: Database["public"]["Enums"]["family_role"]
+          token_hash: string
+        }
+        Insert: {
+          accepted_at?: string | null
+          accepted_by?: string | null
+          created_at?: string
+          created_by: string
+          expires_at: string
+          family_id: string
+          id?: string
+          revoked_at?: string | null
+          revoked_by?: string | null
+          role: Database["public"]["Enums"]["family_role"]
+          token_hash: string
+        }
+        Update: {
+          accepted_at?: string | null
+          accepted_by?: string | null
+          created_at?: string
+          created_by?: string
+          expires_at?: string
+          family_id?: string
+          id?: string
+          revoked_at?: string | null
+          revoked_by?: string | null
+          role?: Database["public"]["Enums"]["family_role"]
+          token_hash?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "family_invitations_family_id_fkey"
+            columns: ["family_id"]
+            isOneToOne: false
+            referencedRelation: "families"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       family_invites: {
         Row: {
           child_code: string
@@ -332,11 +382,16 @@ export type Database = {
     }
     Functions: {
       _gen_code: { Args: never; Returns: string }
+      _hash_invite_token: { Args: { _token: string }; Returns: string }
       _require_child_in_family: {
         Args: { _child: string; _family: string }
         Returns: undefined
       }
       _require_parent: { Args: never; Returns: string }
+      accept_family_invite: {
+        Args: { _display_name: string; _token: string }
+        Returns: Database["public"]["Enums"]["family_role"]
+      }
       child_balance: {
         Args: { _child: string }
         Returns: {
@@ -354,6 +409,17 @@ export type Database = {
       create_family: {
         Args: { _display_name: string; _family_name: string }
         Returns: string
+      }
+      create_family_invite: {
+        Args: {
+          _role: Database["public"]["Enums"]["family_role"]
+          _valid_hours?: number
+        }
+        Returns: {
+          expires_at: string
+          id: string
+          token: string
+        }[]
       }
       join_family: {
         Args: { _code: string; _display_name: string }
@@ -374,6 +440,15 @@ export type Database = {
         Args: never
         Returns: Database["public"]["Enums"]["family_role"]
       }
+      preview_family_invite: {
+        Args: { _token: string }
+        Returns: {
+          expires_at: string
+          family_name: string
+          role: Database["public"]["Enums"]["family_role"]
+          status: string
+        }[]
+      }
       record_payment: {
         Args: {
           _amount_cents: number
@@ -389,6 +464,7 @@ export type Database = {
         Args: { _approve: boolean; _comment: string; _id: string }
         Returns: undefined
       }
+      revoke_family_invite: { Args: { _id: string }; Returns: undefined }
       set_allowance: {
         Args: { _active: boolean; _cents: number }
         Returns: undefined
