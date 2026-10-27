@@ -54,7 +54,7 @@ export function CloseWeekDialog({ open, onOpenChange, childId, childName, family
     setBusy(true);
     const { error } = await supabase.rpc("close_week", { _child: childId, _week_start: sel });
     setBusy(false);
-    if (error) return toast.error(errMsg(error));
+    if (error) { toast.error(errMsg(error)); return; }
     toast.success(`Semana fechada: ${formatBRL(family.allowance_cents)} creditados para ${childName}`);
     setSel(null);
     onOpenChange(false);
@@ -97,11 +97,11 @@ export function PaymentDialog({ open, onOpenChange, childId, childName, balance 
   const cents = parseBRL(amount);
 
   async function submit() {
-    if (!cents) return toast.error("Informe um valor válido");
+    if (!cents) { toast.error("Informe um valor válido"); return; }
     setBusy(true);
     const { error } = await supabase.rpc("record_payment", { _child: childId, _amount_cents: cents, _paid_on: date, _note: note, _idem: idem });
     setBusy(false);
-    if (error) return toast.error(errMsg(error));
+    if (error) { toast.error(errMsg(error)); return; }
     toast.success(`Pagamento de ${formatBRL(cents)} registrado`);
     setAmount(""); setNote(""); setIdem(crypto.randomUUID());
     onOpenChange(false);
@@ -137,11 +137,11 @@ export function ReserveDialog({ open, onOpenChange, childId, childName, balance 
   const cents = parseBRL(amount);
 
   async function submit() {
-    if (!cents) return toast.error("Informe um valor válido");
+    if (!cents) { toast.error("Informe um valor válido"); return; }
     setBusy(true);
     const { error } = await supabase.rpc("move_reserve", { _child: childId, _amount_cents: cents, _add: add, _note: note, _idem: idem });
     setBusy(false);
-    if (error) return toast.error(errMsg(error));
+    if (error) { toast.error(errMsg(error)); return; }
     toast.success(add ? "Valor reservado no cofrinho" : "Valor retirado do cofrinho");
     setAmount(""); setNote(""); setIdem(crypto.randomUUID());
     onOpenChange(false);
@@ -178,11 +178,11 @@ export function GoalDialog({ open, onOpenChange, childId, initial }: {
   const cents = parseBRL(amount);
 
   async function submit() {
-    if (!cents || !title.trim()) return toast.error("Preencha o nome e o valor");
+    if (!cents || !title.trim()) { toast.error("Preencha o nome e o valor"); return; }
     setBusy(true);
     const { error } = await supabase.rpc("set_goal", { _child: childId, _title: title, _target_cents: cents });
     setBusy(false);
-    if (error) return toast.error(errMsg(error));
+    if (error) { toast.error(errMsg(error)); return; }
     toast.success("Meta salva!");
     onOpenChange(false);
     refresh();
@@ -211,7 +211,7 @@ export function ReviewDialog({ open, onOpenChange, submissionId, title, approve 
     setBusy(true);
     const { error } = await supabase.rpc("review_submission", { _id: submissionId, _approve: approve, _comment: comment });
     setBusy(false);
-    if (error) return toast.error(errMsg(error));
+    if (error) { toast.error(errMsg(error)); return; }
     toast.success(approve ? "Tarefa aprovada e valor creditado" : "Tarefa rejeitada");
     setComment("");
     onOpenChange(false);

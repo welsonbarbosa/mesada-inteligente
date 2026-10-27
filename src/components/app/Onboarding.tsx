@@ -18,7 +18,7 @@ export function Onboarding() {
     setBusy(true);
     const { error } = await fn();
     setBusy(false);
-    if (error) return toast.error(errMsg(error));
+    if (error) { toast.error(errMsg(error)); return; }
     toast.success(ok);
     refresh();
   }

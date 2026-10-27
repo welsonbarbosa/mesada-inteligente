@@ -52,7 +52,7 @@ function ChildTasks() {
     setBusy(true);
     const { error } = await supabase.rpc("submit_task", { _task_id: sending.id, _note: note });
     setBusy(false);
-    if (error) return toast.error(errMsg(error));
+    if (error) { toast.error(errMsg(error)); return; }
     toast.success("Enviado para aprovação! 🚀");
     setSending(null); setNote("");
     refresh();
@@ -145,13 +145,13 @@ function TaskDialog({ task, onClose }: { task: Task | null; onClose: () => void 
 
   async function save() {
     const cents = parseBRL(amount);
-    if (cents === null) return toast.error("Valor inválido");
+    if (cents === null) { toast.error("Valor inválido"); return; }
     setBusy(true);
     const { error } = await supabase.rpc("upsert_task", {
       _id: task?.id ?? (null as unknown as string), _title: title, _description: desc, _reward_cents: cents, _frequency: freq, _active: active,
     });
     setBusy(false);
-    if (error) return toast.error(errMsg(error));
+    if (error) { toast.error(errMsg(error)); return; }
     toast.success("Tarefa salva");
     refresh();
     onClose();
