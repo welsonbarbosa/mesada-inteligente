@@ -42,7 +42,7 @@ function AuthPage() {
     if (error) toast.error(error.message === "Invalid login credentials" ? "E-mail ou senha incorretos" : error.message);
   }
   async function signUp() {
-    if (password.length < 8) return toast.error("A senha precisa ter pelo menos 8 caracteres");
+    if (password.length < 8) { toast.error("A senha precisa ter pelo menos 8 caracteres"); return; }
     setBusy(true);
     const { data, error } = await supabase.auth.signUp({ email, password, options: { emailRedirectTo: window.location.origin + "/inicio" } });
     setBusy(false);
