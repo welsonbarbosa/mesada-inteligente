@@ -65,11 +65,11 @@ function AllowanceSettings() {
 
   async function save() {
     const cents = parseBRL(amount);
-    if (cents === null) return toast.error("Valor inválido");
+    if (cents === null) { toast.error("Valor inválido"); return; }
     setBusy(true);
     const { error } = await supabase.rpc("set_allowance", { _cents: cents, _active: active });
     setBusy(false);
-    if (error) return toast.error(errMsg(error));
+    if (error) { toast.error(errMsg(error)); return; }
     toast.success(`Mesada base: ${formatBRL(cents)}/semana`);
     refresh();
   }
@@ -95,7 +95,7 @@ function Invites() {
   async function regen() {
     if (!confirm("Gerar novos códigos? Os atuais deixam de funcionar.")) return;
     const { error } = await supabase.rpc("regenerate_invites");
-    if (error) return toast.error(errMsg(error));
+    if (error) { toast.error(errMsg(error)); return; }
     toast.success("Novos códigos gerados");
     refresh();
   }
@@ -110,7 +110,7 @@ function Invites() {
   );
 }
 
-function Code({ label, code }: { label: string; code?: string }) {
+function Code({ label, code }: { label: string; code?: string | undefined }) {
   return (
     <button type="button" className="rounded-2xl bg-card p-3 text-left shadow-card"
       onClick={() => code && navigator.clipboard?.writeText(code).then(() => toast.success("Código copiado"))}>

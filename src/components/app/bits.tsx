@@ -34,7 +34,7 @@ export function Empty({ children }: { children: ReactNode }) {
   return <p className="rounded-2xl border border-dashed bg-card p-4 text-center text-sm text-muted-foreground">{children}</p>;
 }
 
-export function BalanceSummary({ balance, childName }: { balance: Balance; childName?: string }) {
+export function BalanceSummary({ balance, childName }: { balance: Balance; childName?: string | undefined }) {
   return (
     <div className="space-y-3 px-5">
       <div className="rounded-3xl bg-hero p-5 shadow-card">
