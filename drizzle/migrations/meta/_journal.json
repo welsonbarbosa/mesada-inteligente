@@ -8,6 +8,13 @@
       "when": 1793058273573,
       "tag": "0000_migration",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1793114412264,
+      "tag": "0001_secure_family_invitations",
+      "breakpoints": true
     }
   ]
 }
